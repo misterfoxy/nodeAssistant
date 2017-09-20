@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/misterfoxy/nodeAssistant/issues"
   },
-  "homepage": "https://github.com/misterfoxy/nodeAssistant#readme"
+  "homepage": "https://github.com/misterfoxy/nodeAssistant#readme",
+  "dependencies": {
+    "node-spotify-api": "^1.0.7",
+    "request": "^2.82.0",
+    "twitter": "^1.7.1"
+  }
 }
