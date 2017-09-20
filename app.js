@@ -12,7 +12,7 @@ switch(action){
         movieSearch(value);
         break;
     case "my-tweets":
-        twitterSearch();
+        twitterSearch(value);
         break;
     case "do-what-it-says":
         doIt();
@@ -45,6 +45,12 @@ function movieSearch(movie){
     
     var request = require('request');
     
+    if(!movie){
+        console.log('If you have nott watched "Mr. Nobody," then you should: http://www.imdb.com/title/tt0485947/');
+        console.log('It is on Netflix!');
+        return;
+    }
+    
     request('http://www.omdbapi.com/?apikey=40e9cece&t='+movie, { json: true}, function (error, response, data) {
         
         if(error){
@@ -62,13 +68,14 @@ function movieSearch(movie){
     }); 
 }
 
-function twitterSearch(){
+function twitterSearch(handle){
     
     var twitter = require('twitter');
     
     var client = new twitter(keys);
+        
     
-    let screenName = {screen_name : 'mattnutty329' };
+    let screenName = {screen_name : handle };
     
     client.get('statuses/user_timeline', screenName, function(error, tweets, reponse){
         
@@ -76,6 +83,9 @@ function twitterSearch(){
             console.log(error);
         } 
         else{
+            console.log("####################");
+            console.log("Recent tweets from " + screenName.screen_name);
+            console.log("####################");
             
             for(var i = 0; i<tweets.length; i++){
                 console.log("|-----------------|");
@@ -113,8 +123,6 @@ function doIt(){
                 console.log("Error");
                 break;
             }
-        
-       
         
     });
 }
