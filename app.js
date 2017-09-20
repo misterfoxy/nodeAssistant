@@ -4,11 +4,6 @@ var keys = require('./keys.js');
 var action = process.argv[2];
 var value = process.argv[3];
 
-const twitConsume = keys.consumer_key;
-const twitConsumeSecret = keys.consumer_secret;
-const twitToken = keys.access_token_key;
-const twitSecretToken = keys.access_token_secret;
-
 switch(action){
     case "spotify-this-song":
         spotifySearch();
@@ -67,30 +62,23 @@ function twitterSearch(){
     
     var twitter = require('twitter');
     
-    var T = new twitter({
-  consumer_key:         twitConsume,
-  consumer_secret:      twitConsumeSecret,
-  access_token:         twitToken,
-  access_token_secret:  twitSecretToken,
-  timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
-});
+    var client = new twitter(keys);
     
     let screenName = {screen_name : 'michaelfox69' };
     
-    T.get('statuses/user_timeline', screenName, function(error, tweets, reponse){
+    client.get('statuses/user_timeline', screenName, function(error, tweets, reponse){
         
-        if(!error){
-      for(var i = 0; i<tweets.length; i++){
-        var date = tweets[i].created_at;
-        console.log("@StefanieDing: " + tweets[i].text + " Created At: " + date.substring(0, 19));
-        console.log("-----------------------");
-        
-        //adds text to log.txt file
-        fs.appendFile('log.txt', "@StefanieDing: " + tweets[i].text + " Created At: " + date.substring(0, 19));
-        fs.appendFile('log.txt', "-----------------------");
-      }
-    }else{
-      console.log('Error occurred', error);
+        if(error){
+            console.log(error);
+        } 
+        else{
+            
+            for(var i = 0; i<tweets.length; i++){
+                console.log("|-----------------|");
+                console.log(tweets[i].text);
+                
+            }
+            
         }
     });
 }
