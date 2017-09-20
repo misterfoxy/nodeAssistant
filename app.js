@@ -1,6 +1,5 @@
 var keys = require('./keys.js');
-
-
+var fs = require('fs');
 var action = process.argv[2];
 var value = process.argv[3];
 
@@ -35,10 +34,18 @@ function spotifySearch(song){
             return console.log('Error occurred: ' + err);
         }
  
-
-        console.log(data.tracks.items[0].album.external_urls.spotify);
-        console.log(data.tracks.items[0].artists[0].name);
-});
+        let trackURL = data.tracks.items[0].album.external_urls.spotify;
+        let artist = data.tracks.items[0].artists[0].name
+        console.log(trackURL);
+        console.log(artist);
+        
+        fs.appendFile('log.txt',"{"+ trackURL + " by " + artist+"},", function(err){
+            if(err){
+                console.log(err);
+            }
+            console.log("Added new entry to log");
+        });
+    });
 }
 
 function movieSearch(movie){
@@ -82,9 +89,11 @@ function twitterSearch(handle){
         if(error){
             console.log(error);
         } 
-        else{
+        
+            let user = screenName.screen_name;
+    
             console.log("####################");
-            console.log("Recent tweets from " + screenName.screen_name);
+            console.log("Recent tweets from " + user);
             console.log("####################");
             
             for(var i = 0; i<tweets.length; i++){
@@ -93,12 +102,11 @@ function twitterSearch(handle){
                 
             }
             
-        }
+        
     });
 }
 
 function doIt(){
-    var fs = require('fs');
     
     fs.readFile('random.txt', 'utf8', function(err, data){
         if(err){
