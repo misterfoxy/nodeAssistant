@@ -6,19 +6,23 @@ var value = process.argv[3];
 
 switch(action){
     case "spotify-this-song":
-        spotifySearch();
+        spotifySearch(value);
         break;
     case "movie-this":
-        movieSearch();
+        movieSearch(value);
+        break;
     case "my-tweets":
         twitterSearch();
+        break;
+    case "do-what-it-says":
+        doIt();
         break;
     default:
         return;
 }
 
 
-function spotifySearch(){
+function spotifySearch(song){
     var Spotify = require('node-spotify-api');
  
     var spotify = new Spotify({
@@ -26,7 +30,7 @@ function spotifySearch(){
         secret: 'cff3310c9ae14eb88b110e50251c78dc'
     });
  
-    spotify.search({ type: 'track', query: value }, function(err, data){
+    spotify.search({ type: 'track', query: song }, function(err, data){
         if (err) {
             return console.log('Error occurred: ' + err);
         }
@@ -37,11 +41,11 @@ function spotifySearch(){
 });
 }
 
-function movieSearch(){
+function movieSearch(movie){
     
     var request = require('request');
     
-    request('http://www.omdbapi.com/?apikey=40e9cece&t='+value, { json: true}, function (error, response, data) {
+    request('http://www.omdbapi.com/?apikey=40e9cece&t='+movie, { json: true}, function (error, response, data) {
         
         if(error){
             console.log(error); 
@@ -64,7 +68,7 @@ function twitterSearch(){
     
     var client = new twitter(keys);
     
-    let screenName = {screen_name : 'michaelfox69' };
+    let screenName = {screen_name : 'mattnutty329' };
     
     client.get('statuses/user_timeline', screenName, function(error, tweets, reponse){
         
@@ -82,5 +86,36 @@ function twitterSearch(){
         }
     });
 }
+
+function doIt(){
+    var fs = require('fs');
     
+    fs.readFile('random.txt', 'utf8', function(err, data){
+        if(err){
+            console.log(err);
+        }
+        
+        let command = data.split(',');
+        action = command[0];
+        value = command[1];
+        
+        switch(action){
+            case "spotify-this-song":
+                spotifySearch(value);
+                break;
+            case "movie-this":
+                movieSearch(value);
+                break;
+            case "my-tweets":
+                twitterSearch();
+                break;
+            default:
+                console.log("Error");
+                break;
+            }
+        
+       
+        
+    });
+}
 
